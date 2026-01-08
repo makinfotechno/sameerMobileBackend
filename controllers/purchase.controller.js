@@ -1,6 +1,6 @@
 import createPurchase, { getAllPurchase } from "../services/purchase.service.js"
 
-const postPurchase = async (req, res) => {
+export const postPurchase = async (req, res) => {
 
     try {
         const { vendorName, mobileNumber, purchasePrice } = req.body
@@ -17,15 +17,13 @@ const postPurchase = async (req, res) => {
     }
 }
 
-export default postPurchase
-
 
 export const allPurchase = async (req,res) => {
 
     try {
         const allPurchase = await getAllPurchase()
 
-        return res.status(200).json({ success: true, message: "Purchase added succesfully", data: allPurchase })
+        return res.status(200).json({ success: true, message: "Purchases fetched successfully", data: allPurchase })
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message })

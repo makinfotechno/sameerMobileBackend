@@ -15,7 +15,6 @@ const vendorDocuments = new mongoose.Schema(
             trim: true
         },
         // more ..............
-
     },
     { _id: false }
 )
@@ -31,7 +30,8 @@ const purchaseModel = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            // match: /^[6-9]\d{9}$/,
+            index: true
+            // match: /^[6-9]\d{9}$/, for indian mobile no.
         },
         purchasePrice: {
             type: Number,

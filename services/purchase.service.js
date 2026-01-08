@@ -11,8 +11,8 @@ const createPurchase = async (payload) => {
 
 export const getAllPurchase = async () => {
     const allPurchaseData = await Purchase.find()
-    if (!allPurchaseData) {
-        throw new Error("Error while adding purchase")
+    if (allPurchaseData.length === 0) {
+        return []
     }
     return allPurchaseData
 }

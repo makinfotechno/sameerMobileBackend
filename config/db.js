@@ -10,7 +10,7 @@ export async function connectdb() {
         }
         await mongoose.connect(mongoString)
         console.log(
-            `MongoDB connected (${dbUri ? "Development" : "Production"})`
+            `MongoDB connected (${isDev ? "Development" : "Production"})`
         );
     } catch (error) {
         console.error('Error While connecting mongodb: ', error)

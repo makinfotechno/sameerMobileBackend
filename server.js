@@ -15,8 +15,7 @@ configDotenv()
 const PORT = process.env.PORT || 5000
 
 app.get("/", (req, res) => {
-    console.log("Get request")
-    res.send("api running")
+    res.send("Backend running")
 })
 
 app.use("/v1/api/user", userRouter)
