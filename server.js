@@ -6,6 +6,8 @@ import salesRoute from "./routes/sale.js"
 import mobileRoute from "./routes/mobile.js"
 import { connectdb } from './config/db.js'
 import { configDotenv } from "dotenv";
+import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"
+
 const app = express()
 
 app.use(express.json())
@@ -22,6 +24,7 @@ app.use("/v1/api/user", userRouter)
 app.use("/v1/api/purchase", purchaseRoute)
 app.use("/v1/api/sale", salesRoute)
 app.use("/v1/api/mobile", mobileRoute)
+app.use("/v1/api/purchaseWithMobile", purchaseWithMobileRoute)
 
 async function startServer() {
     await connectdb();
