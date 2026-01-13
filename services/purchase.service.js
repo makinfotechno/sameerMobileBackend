@@ -1,6 +1,6 @@
 import Purchase from "../models/purchaseModel.js"
 
-const createPurchase = async ( purchase, session ) => {
+export const createPurchase = async (purchase, session) => {
     const purchaseData = await Purchase.create([purchase], { session })
     if (!purchaseData) {
         throw new Error("Error while adding purchase")
@@ -38,4 +38,11 @@ export const getAllPurchase = async () => {
     return allPurchaseData
 }
 
-export default createPurchase
+export const getPurchase = async (id) => {
+    console.log(id, "id")
+    const purchaseData = await Purchase.findById(id)
+    if (!purchaseData) {
+        throw new Error("Purchase data not found")
+    }
+    return purchaseData
+}

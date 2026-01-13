@@ -2,12 +2,15 @@ import createUserService from "../services/user.service.js"
 
 const createUser = async (req, res) => {
     try {
-        const { name, mobile } = req.body
-        console.log(name, mobile,'reqbody')
-        if (!name || !mobile) {
-            res.json({ status: 400, message: 'Credentials required' })
+        const { name, mobile, mPin } = req.body
+        console.log(name, mobile,mPin,'reqbody')
+        if (!mPin) {
+            res.json({ status: 400, message: 'mPin is required' })
         }        
-        const serviceRes = await createUserService({ name, mobile })
+        if (!mobile) {
+            res.json({ status: 400, message: 'Mobile number is required' })
+        }        
+        const serviceRes = await createUserService({ mPin, mobile })
         console.log(serviceRes,'serviceRes')
 
         return res.status(201).json({

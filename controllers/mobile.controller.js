@@ -1,4 +1,4 @@
-import { createMobile, deleteMobileByID, getAllMobile, updateMobileByID } from "../services/mobile.service.js"
+import { createMobile, deleteMobileByID, getAllMobile, updateMobileByID, mobileByID } from "../services/mobile.service.js"
 
 export const postMobile = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ export const postMobile = async (req, res) => {
         }
         const addMobile = await createMobile(req.body)
 
-        return res.status(200).json({ success: true, message: "Purchase added succesfully", data: addMobile })
+        return res.status(200).json({ success: true, message: "Mobile added succesfully", data: addMobile })
     } catch (error) {
         res.status(400).json({ success: false, message: error.message })
     }
@@ -59,6 +59,18 @@ export const allMobile = async (req, res) => {
 
         return res.status(200).json({ success: true, message: "All mobile Data fetched successfully", data: allMobileData })
 
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message })
+    }
+}
+ 
+export const getMobileById = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const Mobile = await mobileByID(id)
+
+        return res.status(200).json({ success: true, message: "Mobile get succesfully", data: Mobile })
     } catch (error) {
         res.status(400).json({ success: false, message: error.message })
     }

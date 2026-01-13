@@ -13,6 +13,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         match: [/^[6-9]\d{9}$/, "Invalid Indian mobile number"]
     },
+    mPin: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+    },
     email: {
         type: String,
         unique: true,

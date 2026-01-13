@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 import { createMobile } from "./mobile.service.js"
-import createPurchase from "./purchase.service.js"
+import {createPurchase} from "./purchase.service.js"
 
 export const createPurchaseWithMobile = async ({ purchase, mobile }) => {
 

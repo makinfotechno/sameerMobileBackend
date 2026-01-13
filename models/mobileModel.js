@@ -6,6 +6,7 @@ const mobileModel = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Purchase',
             required: true,
+            unique: true,
             index: true
         },
         brand: {

@@ -3,7 +3,7 @@ import Mobile from "../models/mobileModel.js"
 export const createMobile = async (mobile, session) => {
     const mobileData = await Mobile.create([mobile], { session })
     if (!mobileData) {
-        throw new Error("Error while adding purchase")
+        throw new Error("Error while adding mobile")
     }
     return mobileData
 }
@@ -12,7 +12,16 @@ export const deleteMobileByID = async (id) => {
 
     const mobileData = await Mobile.findByIdAndDelete(id)
     if (!mobileData) {
-        throw new Error("Error while adding purchase")
+        throw new Error("Error while deleting mobile")
+    }
+    return mobileData
+}
+
+export const mobileByID = async (id) => {
+
+    const mobileData = await Mobile.findById(id)
+    if (!mobileData) {
+        throw new Error("Error while finding mobile")
     }
     return mobileData
 }

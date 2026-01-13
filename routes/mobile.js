@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { postMobile, allMobile, deleteMobile, updateMobile } from "../controllers/mobile.controller.js";
+import { postMobile, allMobile, deleteMobile, updateMobile, getMobileById } from "../controllers/mobile.controller.js";
 
 const router = Router()
 
 
 router.get('/', allMobile)
+router.get('/:id', getMobileById)
 router.post('/', postMobile)
 router.delete('/:id', deleteMobile)
 router.put('/:id', updateMobile)
