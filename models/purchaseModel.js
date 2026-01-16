@@ -10,11 +10,14 @@ const vendorDocuments = new mongoose.Schema(
             type: String,
             trim: true
         },
-        panCard: {
+        voterId: {
             type: String,
             trim: true
         },
-        // more ..............
+        passport: {
+            type: String,
+            trim: true
+        },
     },
     { _id: false }
 )
@@ -35,7 +38,7 @@ const purchaseModel = new mongoose.Schema(
         },
         purchasePrice: {
             type: Number,
-            reqired: true,
+            required: true,
             min: 0,
         },
         vendorDocs: vendorDocuments,
@@ -62,6 +65,17 @@ const purchaseModel = new mongoose.Schema(
     },
     { timestamps: true }
 )
+
+purchaseModel.pre("validate", function (next) {
+  const docs = this.vendorDocs || {};
+  const hasAtLeastOneDoc = Object.values(docs).some(Boolean);
+
+  if (!hasAtLeastOneDoc) {
+    return next(new Error("At least one vendor document is required"));
+  }
+  next();
+});
+
 
 const Purchase = mongoose.model("Purchase", purchaseModel)
 

@@ -4,6 +4,7 @@ import userRouter from "./routes/user.route.js"
 import purchaseRoute from "./routes/purchase.js"
 import salesRoute from "./routes/sale.js"
 import mobileRoute from "./routes/mobile.js"
+import sellDetails from "./routes/sellDetails.js"
 import { connectdb } from './config/db.js'
 import { configDotenv } from "dotenv";
 import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"

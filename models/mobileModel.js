@@ -33,7 +33,7 @@ const mobileModel = new mongoose.Schema(
         },
         condition: {
             type: String,
-            enum: ['Like new', 'Minor scratches', 'Visible dent', 'Damaged']
+            enum: ['Like new', 'Minor scratches', 'Visible dents', 'Damaged']
         },
         status: {
             type: String,
