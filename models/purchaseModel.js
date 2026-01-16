@@ -66,15 +66,18 @@ const purchaseModel = new mongoose.Schema(
     { timestamps: true }
 )
 
-purchaseModel.pre("validate", function (next) {
-  const docs = this.vendorDocs || {};
-  const hasAtLeastOneDoc = Object.values(docs).some(Boolean);
+purchaseModel.pre("validate", function () {
+    const docs = this.vendorDocs || {};
+    const hasAtLeastOneDoc = Object.values(docs).some(Boolean);
 
-  if (!hasAtLeastOneDoc) {
-    return next(new Error("At least one vendor document is required"));
-  }
-  next();
+    if (!hasAtLeastOneDoc) {
+        this.invalidate(
+            "vendorDocs",
+            "At least one vendor document is required"
+        );
+    }
 });
+
 
 
 const Purchase = mongoose.model("Purchase", purchaseModel)
