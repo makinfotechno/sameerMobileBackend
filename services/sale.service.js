@@ -41,7 +41,7 @@ export const getAllSale = async () => {
 export const getSale = async (id) => {
     const saleData = await Sale.findById(id)
     if (!saleData) {
-        throw new Error("All sales data not found")
+        throw new Error("Requested sale data not found")
     }
     return saleData
 }
