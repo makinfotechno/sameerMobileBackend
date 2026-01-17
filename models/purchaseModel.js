@@ -46,7 +46,7 @@ const purchaseModel = new mongoose.Schema(
             type: [String],
             default: []
         },
-        OriginalBill: {
+        hasOriginalBill: {
             type: Boolean,
         },
         billPhoto: {
