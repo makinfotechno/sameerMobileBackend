@@ -23,13 +23,13 @@ const mobileModel = new mongoose.Schema(
             required: true
         },
         storage: {
-            type: String,
+            type: String
         },
         ram: {
-            type: String,
+            type: String
         },
         color: {
-            type: String,
+            type: String
         },
         condition: {
             type: String,
@@ -41,14 +41,13 @@ const mobileModel = new mongoose.Schema(
             default: "Instock"
         },
         hasBox: {
-            type: Boolean,
+            type: Boolean
         },
         hasCharger: {
-            type: Boolean,
+            type: Boolean
         },
-        mobilePhoto: {
-            type: [String],
-            default: []
+        mobilePhotos: {
+            type: String
         }
     },
     { timestamps: true }

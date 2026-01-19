@@ -17,10 +17,10 @@ export const deletePurchaseByID = async (id) => {
     return purchaseData
 }
 
-export const updatePurchaseByID = async (id, updateData) => {
+export const updatePurchaseByID = async (id, updateData, session) => {
 
     const purchaseData = await Purchase.findByIdAndUpdate(
-        id, { $set: updateData }, { new: true, runValidators: true }
+        id, { $set: updateData }, { new: true, runValidators: true, session }
     );
 
     if (!purchaseData) {

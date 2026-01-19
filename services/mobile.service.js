@@ -26,10 +26,10 @@ export const mobileByID = async (id) => {
     return mobileData
 }
 
-export const updateMobileByID = async (id, updateData) => {
+export const updateMobileByID = async (id, updateData, session) => {
 
     const Data = await Mobile.findByIdAndUpdate(
-        id, { $set: updateData }, { new: true, runValidators: true }
+        id, { $set: updateData }, { new: true, runValidators: true, session }
     );
 
     if (!Data) {

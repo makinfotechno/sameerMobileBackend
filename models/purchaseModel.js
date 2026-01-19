@@ -1,26 +1,26 @@
 import mongoose from "mongoose";
 
-const vendorDocuments = new mongoose.Schema(
-    {
-        adharCard: {
-            type: String,
-            trim: true
-        },
-        drivingLicense: {
-            type: String,
-            trim: true
-        },
-        voterId: {
-            type: String,
-            trim: true
-        },
-        passport: {
-            type: String,
-            trim: true
-        },
-    },
-    { _id: false }
-)
+// const vendorDocuments = new mongoose.Schema(
+//     {
+//         adharCard: {
+//             type: String,
+//             trim: true
+//         },
+//         drivingLicense: {
+//             type: String,
+//             trim: true
+//         },
+//         voterId: {
+//             type: String,
+//             trim: true
+//         },
+//         passport: {
+//             type: String,
+//             trim: true
+//         },
+//     },
+//     { _id: false }
+// )
 
 const purchaseModel = new mongoose.Schema(
     {
@@ -41,17 +41,22 @@ const purchaseModel = new mongoose.Schema(
             required: true,
             min: 0,
         },
-        vendorDocs: vendorDocuments,
+        // vendorDocs: vendorDocuments,
+        vendorDocument: {
+            type: String,
+            enum: ["adharCard", "drivingLicense", "voterId", "passport"]
+        },
+        vendorDocumentPhoto: {
+            type: String,
+        },
         vendorPhoto: {
-            type: [String],
-            default: []
+            type: String,
         },
         hasOriginalBill: {
             type: Boolean,
         },
         billPhoto: {
-            type: [String],
-            default: []
+            type: String,
         },
         paymentMode: {
             type: String,
@@ -66,17 +71,17 @@ const purchaseModel = new mongoose.Schema(
     { timestamps: true }
 )
 
-purchaseModel.pre("validate", function () {
-    const docs = this.vendorDocs || {};
-    const hasAtLeastOneDoc = Object.values(docs).some(Boolean);
+// purchaseModel.pre("validate", function () {
+//     const docs = this.vendorDocs || {};
+//     const hasAtLeastOneDoc = Object.values(docs).some(Boolean);
 
-    if (!hasAtLeastOneDoc) {
-        this.invalidate(
-            "vendorDocs",
-            "At least one vendor document is required"
-        );
-    }
-});
+//     if (!hasAtLeastOneDoc) {
+//         this.invalidate(
+//             "vendorDocs",
+//             "At least one vendor document is required"
+//         );
+//     }
+// });
 
 
 
