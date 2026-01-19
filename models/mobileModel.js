@@ -46,7 +46,7 @@ const mobileModel = new mongoose.Schema(
         hasCharger: {
             type: Boolean
         },
-        mobilePhotos: {
+        mobilePhoto: {
             type: String
         }
     },

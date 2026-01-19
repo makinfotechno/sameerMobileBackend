@@ -1,10 +1,8 @@
 import mongoose from "mongoose"
 import { createMobile, updateMobileByID } from "./mobile.service.js"
 import { createPurchase, updatePurchaseByID } from "./purchase.service.js"
-import { uploadS3 } from "../utils/uploadS3.js";
-
-
-// post text and get purchase id - 
+import { uploadS3Object } from "../utils/s3Config.js";
+import { randomUUID } from "crypto";
 
 export const createPurchaseWithMobile = async (req) => {
 
@@ -13,12 +11,10 @@ export const createPurchaseWithMobile = async (req) => {
 
     const files = Object.values(req.files).flat();
 
-    // console.log(files, 'filesllllllllll')
-
     const session = await mongoose.startSession()
     session.startTransaction()
-    try {
 
+    try {
         const purchaseRes = await createPurchase(purchase, session)
 
         const purchaseId = purchaseRes[0]._id.toString();
@@ -34,24 +30,23 @@ export const createPurchaseWithMobile = async (req) => {
         let mobilewiths3keys = {}
 
         for (const file of files) {
+       
+                const Spkey = `${purchaseId}/${randomUUID()}${file.originalname}`;
 
-
-            if (file.fieldname === "mobilePhotos") {
-                await uploadS3(file, purchaseId, "mobile")
-                console.log('mobilePhotos runnsssss', file.fieldname)
+            if (file.fieldname === "mobilePhoto") {
+                await uploadS3Object(file, Spkey, "mobile")
                 mobilewiths3keys = await updateMobileByID(mobileRes[0]._id, {
-                    [file.fieldname]: `mobile/${purchaseId}/${file.originalname}`
+                    [file.fieldname]: `mobile/${Spkey}`
                 }, session);
 
             } else {
-                await uploadS3(file, purchaseId, "purchase")
+                await uploadS3Object(file, Spkey, "purchase")
                 console.log('purchasewiths3keys runnsssss', file.fieldname)
                 purchasewiths3keys = await updatePurchaseByID(purchaseId, {
-                    [file.fieldname]: `purchase/${purchaseId}/${file.originalname}`
+                    [file.fieldname]: `purchase/${Spkey}`
                 }, session);
             }
         }
-        // console.log(purchasewiths3keys, mobilewiths3keys, 'dataWithKeyssss')
 
         return {
             purchase: purchasewiths3keys,
