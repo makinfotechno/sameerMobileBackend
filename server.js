@@ -4,7 +4,6 @@ import userRouter from "./routes/user.route.js"
 import purchaseRoute from "./routes/purchase.js"
 import salesRoute from "./routes/sale.js"
 import mobileRoute from "./routes/mobile.js"
-import sellDetails from "./routes/sellDetails.js"
 import { connectdb } from './config/db.js'
 import { configDotenv } from "dotenv";
 import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"
@@ -18,9 +17,7 @@ configDotenv()
 
 const PORT = process.env.PORT || 5000
 
-app.get("/", (req, res) => {
-    res.send("Backend running")
-})
+app.get("/", (req, res) => { res.send("Sameer Mobile Backend running") })
 
 app.use("/v1/api/user", userRouter)
 app.use("/v1/api/purchase", purchaseRoute)
