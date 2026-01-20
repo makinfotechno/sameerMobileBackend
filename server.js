@@ -28,11 +28,17 @@ app.use("/v1/api/stock", stock)
 app.use("/v1/api/soldOutStock", soldOutstock)
 
 async function startServer() {
-    await connectdb();
-
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
         console.log(`Server running on port ${PORT}`);
     });
+
+    try {
+        await connectdb();
+        console.log("Database connected");
+    } catch (err) {
+        console.error("DB connection failed:", err);
+    }
 }
+
 
 startServer();
