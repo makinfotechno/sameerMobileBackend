@@ -58,6 +58,9 @@ const purchaseModel = new mongoose.Schema(
         billPhoto: {
             type: String,
         },
+        agreementPhoto: {
+            type: String,
+        },
         paymentMode: {
             type: String,
             enum: ["cash", "upi", "bank_transfer", "card"],

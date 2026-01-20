@@ -15,42 +15,35 @@ export const createPurchaseWithMobile = async (req) => {
     session.startTransaction()
 
     try {
-        const purchaseRes = await createPurchase(purchase, session)
+        let purchaseRes = await createPurchase(purchase, session)
 
         const purchaseId = purchaseRes[0]._id.toString();
 
-        const mobileRes = await createMobile({
-            ...mobile,
-            purchaseId
-        }, session)
+        let mobileRes = await createMobile({ ...mobile, purchaseId }, session)
 
-        await session.commitTransaction();   
-
-        let purchasewiths3keys = {}
-        let mobilewiths3keys = {}
+        await session.commitTransaction();
 
         for (const file of files) {
-       
-                const Spkey = `${purchaseId}/${randomUUID()}${file.originalname}`;
+
+            const Spkey = `${purchaseId}/${randomUUID()}${file.originalname}`;
 
             if (file.fieldname === "mobilePhoto") {
                 await uploadS3Object(file, Spkey, "mobile")
-                mobilewiths3keys = await updateMobileByID(mobileRes[0]._id, {
+                mobileRes = await updateMobileByID(mobileRes[0]._id, {
                     [file.fieldname]: `mobile/${Spkey}`
                 }, session);
 
             } else {
                 await uploadS3Object(file, Spkey, "purchase")
-                console.log('purchasewiths3keys runnsssss', file.fieldname)
-                purchasewiths3keys = await updatePurchaseByID(purchaseId, {
+                purchaseRes = await updatePurchaseByID(purchaseId, {
                     [file.fieldname]: `purchase/${Spkey}`
                 }, session);
             }
         }
-
+        console.log(purchaseRes, mobileRes, "responseData")
         return {
-            purchase: purchasewiths3keys,
-            mobile: mobilewiths3keys,
+            purchase: purchaseRes,
+            mobile: mobileRes,
         }
 
     } catch (error) {

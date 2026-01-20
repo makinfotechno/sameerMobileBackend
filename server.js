@@ -8,7 +8,8 @@ import sellDetails from "./routes/sellDetails.js"
 import { connectdb } from './config/db.js'
 import { configDotenv } from "dotenv";
 import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"
-
+import stock from "./routes/stock.js"
+import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
 
 app.use(express.json())
@@ -26,6 +27,8 @@ app.use("/v1/api/purchase", purchaseRoute)
 app.use("/v1/api/sale", salesRoute)
 app.use("/v1/api/mobile", mobileRoute)
 app.use("/v1/api/purchaseWithMobile", purchaseWithMobileRoute)
+app.use("/v1/api/stock", stock)
+app.use("/v1/api/soldOutStock", soldOutstock)
 
 async function startServer() {
     await connectdb();

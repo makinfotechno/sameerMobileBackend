@@ -1,11 +1,37 @@
+import mongoose from "mongoose";
+import Mobile from "../models/mobileModel.js";
 import Sale from "../models/saleModel.js"
 
 export const createSale = async (saleData) => {
-    const saleAddData = await Sale.create(saleData)
-    if (!saleAddData) {
-        throw new Error("Error while adding purchase")
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+
+        const { purchaseId } = saleData;
+
+        const mobileUpdate = await Mobile.findOneAndUpdate(
+            { purchaseId, status: { $ne: "SoldOut" } },
+            { status: "SoldOut" },
+            { new: true, runValidators: true, session }
+        );
+        if (!mobileUpdate) {
+            throw new Error("Mobile not found or already sold out");
+        }
+        const saleAddData = await Sale.create([saleData], {session});
+        if (!saleAddData) {
+            throw new Error("Error while adding purchase")
+        }
+
+
+        session.commitTransaction();
+        return { mobileUpdate, saleAddData: saleAddData[0] }
+
+    } catch (error) {
+        session.abortTransaction();
+        throw new Error(error.message);
     }
-    return saleAddData
+
 }
 
 export const deleteSaleByID = async (id) => {
