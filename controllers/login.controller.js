@@ -4,7 +4,7 @@ import User from "../models/userModel.js"
 
 const loginUser = async (req, res) => {
     try {
-        const { mobile, mPin } = req.body
+        const { mobile, mPin, ownerName, shopName, adress, city } = req.body
 
         if (!mobile || !mPin) {
             return res.status(400).json({ message: "mobile & mPin required" })
@@ -24,16 +24,9 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" })
         }
 
-        const token = jwt.sign(
-            { userId: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "30d" }
-        )
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" })
 
-        return res.json({
-            success: true,
-            token
-        })
+        return res.json({success: true,message: "Login successful", data: { token, user } })
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

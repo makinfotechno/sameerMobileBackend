@@ -1,6 +1,26 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+    ownerName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    shopName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    adress: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    city: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     mobile: {
         type: String,
         required: true,
