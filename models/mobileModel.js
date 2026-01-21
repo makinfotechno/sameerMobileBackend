@@ -46,6 +46,12 @@ const mobileModel = new mongoose.Schema(
         hasCharger: {
             type: Boolean
         },
+        hasHandsFree: {
+            type: Boolean
+        },
+        hasDataCable: {
+            type: Boolean
+        },
         mobilePhoto: {
             type: String
         }
