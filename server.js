@@ -11,7 +11,9 @@ import stock from "./routes/stock.js"
 import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
 
-app.use(express.json())
+
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 app.use(cors())
 configDotenv()
 
