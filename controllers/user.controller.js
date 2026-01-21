@@ -39,7 +39,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     try {
-        const { mobile, mPin } = req.body
+        const { mobile, mPin } = req.query;
 
         if (!mobile || !mPin) {
             return res.status(400).json({ message: "mobile & mPin required" })
@@ -61,9 +61,45 @@ export const loginUser = async (req, res) => {
 
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" })
 
-        return res.json({success: true,message: "Login successful", data: { token, user } })
+        return res.json({ success: true, message: "Login successful", data: { token, user } })
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
 }
+
+export const updateUser = async (req, res) => {
+    console.log(req, 'updateUser........')
+    try {
+        const userId = req.userId; 
+
+        const { ownerName, shopName, adress, city, mobile, mPin } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (ownerName) user.ownerName = ownerName;
+        if (shopName) user.shopName = shopName;
+        if (adress) user.adress = adress;
+        if (city) user.city = city;
+        if (mobile) user.mobile = mobile;
+
+        if (mPin) {
+            const hashedPin = await bcrypt.hash(mPin, 10);
+            user.mPin = hashedPin;
+        }
+
+        await user.save();
+
+        return res.json({
+            success: true,
+            message: "User updated successfully",
+            data: user
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
