@@ -19,7 +19,6 @@ export const deleteSale = async (req, res) => {
 
     try {
         const { id } = req.params
-        console.log(id, 'id')
 
         const data = await deleteSaleByID(id)
 

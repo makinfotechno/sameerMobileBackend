@@ -40,7 +40,6 @@ export const createPurchaseWithMobile = async (req) => {
                 }, session);
             }
         }
-        console.log(purchaseRes, mobileRes, "responseData")
         return {
             purchase: purchaseRes,
             mobile: mobileRes,

@@ -31,9 +31,6 @@ export const getS3Objects = async (s3key) => {
         },
     })
 
-    console.log("getS3Objects called with key:--", s3key);
-
-
     if (!s3key) return null;
 
     const command = new GetObjectCommand({

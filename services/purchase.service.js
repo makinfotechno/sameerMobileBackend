@@ -39,7 +39,6 @@ export const getAllPurchase = async () => {
 }
 
 export const getPurchase = async (id) => {
-    console.log(id, "id")
     const purchaseData = await Purchase.findById(id)
     if (!purchaseData) {
         throw new Error("Purchase data not found")

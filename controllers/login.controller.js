@@ -4,7 +4,7 @@ import User from "../models/userModel.js"
 
 const loginUser = async (req, res) => {
     try {
-        const { mobile, mPin, ownerName, shopName, adress, city } = req.body
+        const { mobile, mPin } = req.body
 
         if (!mobile || !mPin) {
             return res.status(400).json({ message: "mobile & mPin required" })

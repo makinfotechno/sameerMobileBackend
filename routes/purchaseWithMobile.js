@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getAllPurchaseWithMobile, addPurchaseWithMobile, updatePurchaseWithMobile } from "../controllers/purchaseWithMobile.controller.js";
 import upload from "../utils/multer.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 const router = Router()
 
 router.post('/', upload.fields([
@@ -9,9 +10,9 @@ router.post('/', upload.fields([
   { name: "billPhoto", maxCount: 1 },
   { name: "mobilePhoto", maxCount: 1 },
   { name: "agreementPhoto", maxCount: 1 }
-]), addPurchaseWithMobile)
+]), authMiddleware, addPurchaseWithMobile)
 
-router.get('/', getAllPurchaseWithMobile)
+router.get('/', authMiddleware, getAllPurchaseWithMobile)
 
 router.put('/:purchaseId', upload.fields([
   { name: "vendorPhoto", maxCount: 1 },
@@ -19,7 +20,7 @@ router.put('/:purchaseId', upload.fields([
   { name: "billPhoto", maxCount: 1 },
   { name: "mobilePhoto", maxCount: 1 },
   { name: "agreementPhoto", maxCount: 1 }
-]), updatePurchaseWithMobile)
+]), authMiddleware, updatePurchaseWithMobile)
 
 
 
