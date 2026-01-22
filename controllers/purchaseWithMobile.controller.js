@@ -20,7 +20,7 @@ export const getAllPurchaseWithMobile = async (req, res) => {
         const limit = Math.min(parseInt(req.query.limit) || 10, 50);
         const skip = (page - 1) * limit;
 
-        const pipeline = [
+         const result = await Purchase.aggregate([
             {
                 $lookup: {
                     from: "mobiles",
@@ -29,32 +29,46 @@ export const getAllPurchaseWithMobile = async (req, res) => {
                     as: "mobile"
                 }
             },
+            { $unwind: { path: "$mobile", preserveNullAndEmptyArrays: true } },
             {
-                $unwind: {
-                    path: "$mobile",
-                    preserveNullAndEmptyArrays: true
+                $facet: {
+                    data: [
+                        { $sort: { createdAt: -1 } },
+                        { $skip: skip },
+                        { $limit: limit }
+                    ],
+                    totalCount: [
+                        { $count: "count" }
+                    ],
+                    stats: [
+                        {
+                            $group: {
+                                _id: null,
+                                stock: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$mobile.status", "Instock"] }, 1, 0]
+                                    }
+                                },
+                                sales: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$mobile.status", "SoldOut"] }, 1, 0]
+                                    }
+                                }
+                            }
+                        }
+                    ]
                 }
             }
-        ];
-
-        // Run paginated data + total count in parallel
-        const [purchasesWithMobile, totalCount] = await Promise.all([
-            Purchase.aggregate([
-                ...pipeline,
-                { $sort: { createdAt: -1 } },   // optional but recommended
-                { $skip: skip },
-                { $limit: limit }
-            ]),
-            Purchase.aggregate([
-                ...pipeline,
-                { $count: "count" }
-            ])
         ]);
 
-        const total = totalCount[0]?.count || 0;
+        const purchasesWithMobile = result[0].data;
+        const total = result[0].totalCount[0]?.count || 0;
+        const stock = result[0].stats[0]?.stock || 0;
+        const sales = result[0].stats[0]?.sales || 0;
+
         const totalPages = Math.ceil(total / limit);
 
-        // Generate S3 signed URLs only for paginated results
+        // Generate S3 signed URLs only for paginated results ...
         const response = await Promise.all(
             purchasesWithMobile.map(async (purchase) => {
                 const p = { ...purchase };
@@ -80,7 +94,9 @@ export const getAllPurchaseWithMobile = async (req, res) => {
                 totalRecords: total,
                 totalPages,
                 currentPage: page,
-                limit
+                limit,
+                stock,
+                sales
             },
             data: response
         });

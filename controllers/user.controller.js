@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs"
 import User from "../models/userModel.js"
 import jwt from "jsonwebtoken"
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res) => { // no provision for multiple users and registration only once from backend
     try {
         const { ownerName, shopName, adress, city, mobile, mPin } = req.body
 
@@ -53,7 +53,6 @@ export const loginUser = async (req, res) => {
         if (mobile !== user.mobile) {
             return res.status(401).json({ message: "Invalid credentials" })
         }
-
         const isValidPin = await bcrypt.compare(mPin, user.mPin)
         if (!isValidPin) {
             return res.status(401).json({ message: "Invalid credentials" })
@@ -71,7 +70,43 @@ export const loginUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     console.log(req, 'updateUser........')
     try {
-        const userId = req.userId; 
+        const userId = req.userId;
+
+        const { ownerName, shopName, adress, city, mobile, mPin } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (ownerName) user.ownerName = ownerName;
+        if (shopName) user.shopName = shopName;
+        if (adress) user.adress = adress;
+        if (city) user.city = city;
+        if (mobile) user.mobile = mobile;
+
+        if (mPin) {
+            const hashedPin = await bcrypt.hash(mPin, 10);
+            user.mPin = hashedPin;
+        }
+
+        await user.save();
+
+        return res.json({
+            success: true,
+            message: "User updated successfully",
+            data: user
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+export const logOutUser = async (req, res) => {
+    console.log(req, 'updateUser........')
+    try {
+        const userId = req.userId;
 
         const { ownerName, shopName, adress, city, mobile, mPin } = req.body;
 
