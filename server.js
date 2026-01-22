@@ -7,6 +7,7 @@ import mobileRoute from "./routes/mobile.js"
 import { connectdb } from './config/db.js'
 import { configDotenv } from "dotenv";
 import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"
+import profileRouter from "./routes/profile.route.js"
 import stock from "./routes/stock.js"
 import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 5000
 app.get("/", (req, res) => { res.send("Sameer Mobile Backend running") })
 
 app.use("/v1/api/user", userRouter)
+app.use("/v1/api/profile", profileRouter)
 app.use("/v1/api/purchase", purchaseRoute)
 app.use("/v1/api/sale", salesRoute)
 app.use("/v1/api/mobile", mobileRoute)

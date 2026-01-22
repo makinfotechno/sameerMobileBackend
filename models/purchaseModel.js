@@ -36,6 +36,25 @@ const purchaseModel = new mongoose.Schema(
             index: true
             // match: /^[6-9]\d{9}$/, for indian mobile no.
         },
+        vendorCity: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        vendorAdress: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        billNumber: {
+            type: String,
+            trim: true,
+        },
+        shopName: {
+            type: String,
+            trim: true,
+            default: "Sameer Mobile"
+        },
         purchasePrice: {
             type: Number,
             required: true,
@@ -69,7 +88,8 @@ const purchaseModel = new mongoose.Schema(
         purchaseDate: {
             type: Date,
             default: Date.now,
-        }
+        },
+
     },
     { timestamps: true }
 )
