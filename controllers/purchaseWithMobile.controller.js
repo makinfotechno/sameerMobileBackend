@@ -16,11 +16,23 @@ export const addPurchaseWithMobile = async (req, res) => {
 
 export const getAllPurchaseWithMobile = async (req, res) => {
     try {
+        const search = req.query.q?.trim();
+        console.log(search, 'search')
         const page = Math.max(parseInt(req.query.page) || 1, 1);
         const limit = Math.min(parseInt(req.query.limit) || 10, 50);
         const skip = (page - 1) * limit;
 
-         const result = await Purchase.aggregate([
+        const matchStage = search
+            ? {
+                $or: [
+                    { "mobile.model": { $regex: search, $options: "i" } },
+                    { "mobile.brand": { $regex: search, $options: "i" } }
+                ]
+            }
+            : {};
+
+        const allPurchaseWithMobileCount = await Purchase.countDocuments();
+        const result = await Purchase.aggregate([
             {
                 $lookup: {
                     from: "mobiles",
@@ -30,6 +42,7 @@ export const getAllPurchaseWithMobile = async (req, res) => {
                 }
             },
             { $unwind: { path: "$mobile", preserveNullAndEmptyArrays: true } },
+            { $match: matchStage },
             {
                 $facet: {
                     data: [
@@ -46,12 +59,12 @@ export const getAllPurchaseWithMobile = async (req, res) => {
                                 _id: null,
                                 stock: {
                                     $sum: {
-                                        $cond: [{ $eq: ["$mobile.status", "Instock"] }, 1, 0]
+                                        $cond: [{ $eq: ["$mobile.status", "inStock"] }, 1, 0]
                                     }
                                 },
                                 sales: {
                                     $sum: {
-                                        $cond: [{ $eq: ["$mobile.status", "SoldOut"] }, 1, 0]
+                                        $cond: [{ $eq: ["$mobile.status", "soldOut"] }, 1, 0]
                                     }
                                 }
                             }
@@ -91,7 +104,7 @@ export const getAllPurchaseWithMobile = async (req, res) => {
             success: true,
             message: response.length ? "Stock fetched successfully" : "No stock found",
             pagination: {
-                totalRecords: total,
+                totalRecords: allPurchaseWithMobileCount,
                 totalPages,
                 currentPage: page,
                 limit,

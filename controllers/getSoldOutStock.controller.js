@@ -2,10 +2,19 @@ import Purchase from "../models/purchaseModel.js";
 import { getS3Objects } from "../utils/s3Config.js";
 
 export const getSoldOutStock = async (req, res) => {
-
+    const search = req.query.q?.trim();
     const page = Math.max(parseInt(req.query.page) || 1, 1);
     const limit = Math.max(parseInt(req.query.limit) || 10, 1);
     const skip = (page - 1) * limit;
+
+    const matchStage = search
+        ? {
+            $or: [
+                { "mobile.model": { $regex: search, $options: "i" } },
+                { "mobile.brand": { $regex: search, $options: "i" } }
+            ]
+        }
+        : {};
 
     try {
         const result = await Purchase.aggregate([
@@ -25,9 +34,10 @@ export const getSoldOutStock = async (req, res) => {
             },
             {
                 $match: {
-                    "mobile.status": "SoldOut"
+                    "mobile.status": "soldOut"
                 }
             },
+            ...(search ? [{ $match: matchStage }] : []),
             {
                 $facet: {
                     metadata: [{ $count: "total" }],

@@ -37,8 +37,8 @@ const mobileModel = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['Instock', 'SoldOut'],
-            default: "Instock"
+            enum: ['inStock', 'soldOut'],
+            default: "inStock"
         },
         hasBox: {
             type: Boolean

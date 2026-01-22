@@ -3,9 +3,19 @@ import { getS3Objects } from "../utils/s3Config.js";
 
 export const getAllStock = async (req, res) => {
   try {
+    const search = req.query.q?.trim();
     const page = Math.max(parseInt(req.query.page) || 1, 1);
     const limit = Math.min(parseInt(req.query.limit) || 10, 50);
     const skip = (page - 1) * limit;
+
+    const matchStage = search
+      ? {
+        $or: [
+          { "mobile.model": { $regex: search, $options: "i" } },
+          { "mobile.brand": { $regex: search, $options: "i" } }
+        ]
+      }
+      : {};
 
     const aggregationPipeline = [
       {
@@ -21,15 +31,17 @@ export const getAllStock = async (req, res) => {
       },
       {
         $match: {
-          "mobile.status": "Instock"
+          "mobile.status": "inStock"
         }
-      }
+      },
+      ...(search ? [{ $match: matchStage }] : [])
     ];
 
     // Run count & data query in parallel
     const [stock, totalCount] = await Promise.all([
       Purchase.aggregate([
         ...aggregationPipeline,
+        { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit }
       ]),
