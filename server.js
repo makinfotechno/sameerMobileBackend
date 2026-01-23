@@ -9,6 +9,7 @@ import { configDotenv } from "dotenv";
 import purchaseWithMobileRoute from "./routes/purchaseWithMobile.js"
 import profileRouter from "./routes/profile.route.js"
 import stock from "./routes/stock.js"
+import generatePdfContractRoute from "./routes/generatepdfContract.route.js"
 import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => { res.send("Sameer Mobile Backend running") })
 
 app.use("/v1/api/user", userRouter)
 app.use("/v1/api/profile", profileRouter)
+app.use("/v1/api/generatePdfContract", generatePdfContractRoute)
 app.use("/v1/api/purchase", purchaseRoute)
 app.use("/v1/api/sale", salesRoute)
 app.use("/v1/api/mobile", mobileRoute)
