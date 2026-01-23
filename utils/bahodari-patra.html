@@ -5,11 +5,15 @@
     <meta charset="UTF-8" />
     <title>બહોદરી પત્ર</title>
 
-    <!-- Google Font: Gujarati -->
+    <!-- Gujarati Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" />
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Noto Sans Gujarati', sans-serif;
             font-size: 14px;
@@ -36,26 +40,17 @@
             margin: 10px 0 20px;
         }
 
-        .line {
-            border-bottom: 1px dotted #000;
-            display: inline-block;
-            min-width: 200px;
-        }
-
         .row {
             margin-bottom: 8px;
+            line-height: 1.6;
         }
 
-        .imei-boxes {
-            display: inline-flex;
-            gap: 4px;
-            vertical-align: middle;
-        }
-
-        .imei-box {
-            width: 18px;
-            height: 18px;
-            border: 1px solid #000;
+        .line {
+            display: inline-block;
+            min-width: 180px;
+            border-bottom: 1px dotted #000;
+            padding: 0 4px;
+            font-weight: 600;
         }
 
         .checkbox {
@@ -63,12 +58,18 @@
             width: 14px;
             height: 14px;
             border: 1px solid #000;
-            margin: 0 5px;
+            margin: 0 6px;
+            vertical-align: middle;
+        }
+
+        .checkbox.checked {
+            background-color: #ffffff;
         }
 
         .section {
-            margin-top: 15px;
-            line-height: 1.6;
+            margin-top: 12px;
+            line-height: 1.7;
+            text-align: justify;
         }
 
         .bottom {
@@ -94,69 +95,80 @@
 
     <div class="top-row">
         <div class="dealer-box">Dealer / Customer</div>
-        <div>તારીખ : ____ / ____ / ______</div>
+        <div>તારીખ : <span class="line">{{purchaseDate}}</span></div>
     </div>
 
     <div class="title">બહોદરી પત્ર</div>
 
     <div class="row">
-        મારું નામ <span class="line"></span> આદિ હું નીચે સહી કરનાર
+        મારું નામ <span class="line">{{vendorName}}</span>છે. આથી હું નીચે સહી કરનાર
     </div>
 
     <div class="row">
-        આ બહોદરીપત્ર લખી આપું છું કે, મારું ગામ <span class="line"></span> સરનામું <span class="line"></span> રહ્યું છે.
+        આ બહોદરીપત્ર લખી આપું છું કે, મારું ગામ
+        <span class="line">{{vendorCity}}</span>
+        સરનામું
+        <span class="line">{{vendorAdress}}</span>
+        રહ્યું છે.
     </div>
 
     <div class="row">
-        મારી પાસે મારી માલિકીની મોબાઇલ જે <span class="line"></span> કંપનીનો છે.
+        મારી પાસે મારી માલિકીની મોબાઇલ જે
+        <span class="line">{{mobile.brand}}</span>
+        કંપનીનો છે.
     </div>
 
     <div class="row">
-        જેનું મોડેલ નં. <span class="line"></span> કલર <span class="line"></span> છે.
+        જેનું મોડેલ નં.
+        <span class="line">{{mobile.model}}</span>
+        કલર
+        <span class="line">{{mobile.color}}</span>
+        છે.
     </div>
 
     <div class="row">
         જેનો IMEI નંબર
-        <span class="imei-boxes">
-            <!-- 15 IMEI boxes -->
-            <span class="imei-box"></span><span class="imei-box"></span><span class="imei-box"></span>
-            <span class="imei-box"></span><span class="imei-box"></span><span class="imei-box"></span>
-            <span class="imei-box"></span><span class="imei-box"></span><span class="imei-box"></span>
-            <span class="imei-box"></span><span class="imei-box"></span><span class="imei-box"></span>
-            <span class="imei-box"></span><span class="imei-box"></span><span class="imei-box"></span>
-        </span>
+        <span class="line">{{mobile.imei}}</span>
+        છે.
     </div>
 
     <div class="row">
-        સાથે ચાર્જર <span class="checkbox"></span>
-        હેડફોન <span class="checkbox"></span>
-        ડેટા કેબલ <span class="checkbox"></span>
-        બીલ <span class="checkbox"></span> છે.
+        સાથે
+        બીલ <span class="checkbox {{hasBill}}"></span>
+        બોક્સ <span class="checkbox {{hasBox}}"></span>
+        ચાર્જર <span class="checkbox {{hasCharger}}"></span>
+        હેન્ડ્સફ્રી <span class="checkbox {{hasHandsFree}}"></span>
+        ડેટા કેબલ <span class="checkbox {{hasDataCable}}"></span>
+        છે.
     </div>
 
     <div class="section">
-        આ મોબાઇલ ફોન મેં કોઈને ગીરવે આપેલ નથી, કોઈનો વેચાણ કરેલ નથી,
-        તે મારી સ્વતંત્ર અને અંગત માલિકીનો છે...
+        આ મોબાઈલ ફોન મેં કોઈને ગીરવે આપેલ નથી, કોઈને વેચાણ કરેલ નથી, તે મારી સ્વતંત્ર અને અંગત માલિકીનો છે. તેમાં કોઈનો
+        હક્ક હિસ્સો નથી. માટે નવો મોબાઈલ ખરીદવો હોઈ આ મોબાઈલ માટે જરૂરીયાત ન હોઈ હું આ મોબાઈલ આજરોજ તમોને વેંચાતો આપું
+        છું, જેના મને રૂ.<span class="line">{{purchasePrice}}</span>પુરા રોકડાં મળેલ છે.
+        આ મોબાઈલની માલિકી અંગે કોઈપણ પ્રકારની તકરાર અથવા તેમના હક્ક, હિસ્સા અંગે કોઈ વાદ-વિવાદ ઉભો થાય તો તેની જવાબદારી
+        મારી અંગત રહેશે. તે બદલ હું નીચે સહી કરી આપું છું.
     </div>
 
     <div class="bottom">
         <div class="box"></div>
 
         <div class="box small-box">
-            બિલની ડીટેલ<br><br>
-            દુકાનનું નામ : ___________<br><br>
-            બીલ નંબર : ___________<br><br>
-            ગ્રાહકનું નામ : ___________<br><br>
-            ગ્રાહકનો મો. : ___________
+            <strong>બિલની વિગતો</strong><br><br>
+            દુકાનનું નામ : <span class="line">{{shopName}}</span><br><br>
+            બીલ નંબર : <span class="line"></span><br><br>
+            ગ્રાહકનું નામ : <span class="line">{{vendorName}}</span><br><br>
+            ગ્રાહકનો મો. : <span class="line">{{mobileNumber}}</span><br><br><br>
+            વેચાણકર્તાની સહી : ______________________<br><br>
         </div>
 
         <div class="box"></div>
 
         <div class="box small-box">
-            વેચાણકર્તાની સહી : ___________<br><br>
-            લેવનારનું નામ : ___________<br><br>
-            મો. : ___________<br><br>
-            તારીખ : ___________
+            લેવનારનું નામ : <span class="line">{{shopName}}</span><br><br>
+            મો. : <span class="line"></span><br><br>
+            <!-- મો. : <span class="line">{{mobileNumber}}</span><br><br> -->
+            તારીખ : <span class="line">{{purchaseDate}}</span>
         </div>
     </div>
 

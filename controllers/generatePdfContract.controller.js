@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -9,18 +10,63 @@ const generateContract = async (req, res) => {
   let browser;
 
   try {
-    browser = await puppeteer.launch({
-      headless: 'new'
-    });
+    const data = req.body;
 
-    const page = await browser.newPage();
+    const formatDate = (isoDate) => {
+  const d = new Date(isoDate);
+  return `${d.getDate().toString().padStart(2, '0')}/${
+    (d.getMonth() + 1).toString().padStart(2, '0')
+  }/${d.getFullYear()}`;
+};
 
-    const htmlPath = path.resolve(
+    // 1️⃣ Read HTML template
+    const templatePath = path.resolve(
       __dirname,
       '../utils/bahodari-patra.html'
     );
 
-    await page.goto(`file://${htmlPath}`, {
+    let html = fs.readFileSync(templatePath, 'utf8');
+
+    // 2️⃣ Simple placeholder replacement
+html = html
+  // basic fields
+  .replace(/{{vendorName}}/g, data.vendorName)
+  .replace(/{{vendorCity}}/g, data.vendorCity)
+  .replace(/{{vendorAdress}}/g, data.vendorAdress)
+  .replace(/{{shopName}}/g, data.shopName)
+  .replace(/{{purchasePrice}}/g, data.purchasePrice)
+  .replace(/{{billNumber}}/g, data.billNumber)
+  .replace(/{{mobileNumber}}/g, data.mobileNumber)
+  .replace(/{{purchaseDate}}/g, formatDate(data.purchaseDate))
+
+  // mobile nested fields
+  .replace(/{{mobile.brand}}/g, data.mobile.brand)
+  .replace(/{{mobile.model}}/g, data.mobile.model)
+  .replace(/{{mobile.color}}/g, data.mobile.color)
+  .replace(/{{mobile.imei}}/g, data.mobile.imei)
+
+  // checkboxes
+  .replace(/{{hasCharger}}/g, data.mobile.hasCharger ? 'checked' : '')
+  .replace(/{{hasHandsFree}}/g, data.mobile.hasHandsFree ? 'checked' : '')
+  .replace(/{{hasDataCable}}/g, data.mobile.hasDataCable ? 'checked' : '')
+  .replace(/{{hasBox}}/g, data.mobile.hasBox ? 'checked' : '');
+
+    // 3️⃣ Generate IMEI boxes
+    const imeiBoxes = data.mobile.imei
+      .split('')
+      .map(() => `<span class="imei-box"></span>`)
+      .join('');
+
+    html = html.replace(
+      '<div class="imei-boxes" id="imei-boxes"></div>',
+      `<div class="imei-boxes">${imeiBoxes}</div>`
+    );
+
+    // 4️⃣ Puppeteer
+    browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
+
+    await page.setContent(html, {
       waitUntil: 'networkidle0'
     });
 
@@ -32,23 +78,16 @@ const generateContract = async (req, res) => {
     await page.pdf({
       path: pdfPath,
       format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20mm',
-        bottom: '20mm',
-        left: '15mm',
-        right: '15mm'
-      }
+      printBackground: true
     });
 
     await browser.close();
 
-    // ⬇️ Send PDF as download
     res.download(pdfPath, 'bahodari-patra.pdf');
 
-  } catch (error) {
+  } catch (err) {
     if (browser) await browser.close();
-    console.error(error);
+    console.error(err);
 
     res.status(500).json({
       success: false,
