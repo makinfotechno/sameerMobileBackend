@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Tax Invoice</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 15px;
+            color: #000;
+        }
+
+        .invoice {
+            border: 2px solid #000;
+        }
+
+        .header-top {
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+            align-items: center;
+            padding: 8px;
+        }
+
+        .header-left {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .logo-text {
+            font-size: 30px;
+            font-weight: 800;
+            color: #1c2f6b;
+            letter-spacing: 2px;
+        }
+
+        .logo-sub {
+            background: #4a90e2;
+            color: #fff;
+            font-size: 12px;
+            display: inline-block;
+            padding: 2px 8px;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .address-strip {
+            background: #2b3f88;
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            padding-top: 8px;
+        }
+
+        .title-row {
+            display: grid;
+            grid-template-columns: 20% 60% 20%;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            padding: 6px;
+            align-items: center;
+        }
+
+        .title-center {
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .title-right {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            border-bottom: 2px solid #000;
+        }
+
+        .info-box {
+            padding: 8px;
+            border-right: 2px solid #000;
+            line-height: 1.7;
+        }
+
+        .info-box:last-child {
+            border-right: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 6px;
+        }
+
+        th {
+            font-weight: 700;
+            text-align: center;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .imei-row td {
+            border-top: none;
+            font-size: 11px;
+        }
+
+        .totals {
+            display: grid;
+            grid-template-columns: 65% 35%;
+            border-top: 2px solid #000;
+        }
+
+        .bank-box {
+            padding: 8px;
+            border-right: 2px solid #000;
+            line-height: 1.7;
+        }
+
+        .amount-box {
+            padding: 8px;
+        }
+
+        .amount-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .grand {
+            border-top: 2px solid #000;
+            margin-top: 6px;
+            padding-top: 6px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .footer {
+            border-top: 2px solid #000;
+            padding: 8px;
+            font-size: 11px;
+            display: grid;
+            grid-template-columns: 70% 30%;
+        }
+
+        .sign {
+            text-align: right;
+            margin-top: 30px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice">
+
+        <div class="header-top">
+            <div class="header-left">
+                Multi Brand Mobile Phone<br>
+                Mobile Accessories<br>
+                Mobile Repairing
+            </div>
+
+            <div class="header-center">
+                <div class="logo-text">SAMEER</div>
+                <div class="logo-sub">MOBILE SHOP</div>
+            </div>
+
+            <div class="header-right">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAO
+wElEQVR4nO1deYxbxRl3Kb2vP0pbqVIP9b+2Uqmqqq16yZT76JEQAuEKVwLlvlogpQRKm5aUI0DC
+TRAECIUkRA2EI4QFsrvJJrvveXe9nrFnvN4je9/3rq+pfrN+ieN63nu2n/284J/0SRFaxjPf9+ab
+75zxeCqooIIKKqigggoqqKCCCsoIdYHAl7VA+ESdsqs0wtfrlL2tUdakER7WKBvWKJ/TKY/O/5tF
+NMr9OmG7dMIe0WnoBi3IT/Nx/lW317FgUBWJfFoPhk/XCL9PI1zXCEvolItCSCMsCcFAgBoJLamv
+7/qs2+ssKwghPqZT/guN8sc1wkbSmdcYDAvW3iU6evtF//CIGJucEtOzc2IuGhXxeEIkk0lJ+Pdc
+NCZm5ubk3/QPj4rO3gHBOrpEY6j1SIFQPqET/pyPsJNfFuLjno8q/H7/J30kfIlGWTCdQcG2TtEz
+MCQmpqZFIpkUhQICmpyeEb2DwyLUfjBjh7C2BsKu+UjtilAo9CksWqes3WCEn7eJ7v5B+QUXG9g9
+PYPDItDanq6m+jTCVn3oBaETdpxOeMBYOIl0iKGxcfmVuoGxickjdoVG+EEtyC70fNjQQMjXNcL/
+k8740YlJUS6AuoPqSzsn3mwKBr/j+TCggfLjdcp65KEaCkv97tYXbwXsxmYWMYQwrgX4Ms9CRVVV
+1dE6Yf+EGYgFhTu7RTQWE/liNDommseI2Nm7W7zYuU081faCWB9+WjwUfko8Edkk/9trPbuEb9Qv
+BueG8/6dWDwuIl296Qf1ozCPPQsJhJAv6IS9gwX4gmHRNzSSMyP6ZgckQ++m94sz6y4R3j2LcqI/
+7Fsu7iBrxbbu18XBme6cf39gZEyawamzYR+cQs9CADxPnfJ6w7qBCWgXU/Fp+YVf13S7OG7P4pyZ
+bkZ/9N0itna9LsZjE7bnMz07K1rCKWuJMFLvD3/TU85oaGn9lk5ZCBOGmQfnyA7GYuPimfaXxG/3
+XuAo07PRqbXLpNrqnx20NbdoLC5opOOwlRQKfc9Tjqin9BiNMmo4U9CllotLRMWmjlckU4rN+Ew6
+sWapeLLteTGbmLWcZyKRELyzyzgXunQS+ban7HQ+ZQcM5mPCVmgYaRTn119VcsZn0tL9K0TN0H5r
+ISSTMrRxSB1ReoynHIB4CqKUhtqx+vLjybhUN07reG+BtCa4znI3xBOJdHW0r7aj4zNu89+jUXb3
+/IEbsdT5MA+varzNdWZ7FbRCv1H0zvZbngnGwaxR9lgZhBZYHKamlbXTPdMrzjtwpetM9loQTF4+
+GTFdy8zsXJqJGj7XFeY3NYW/hiAWJoFIoxmwoEX7LnaduV6bBGvMP05N1zQwMpo6D/iYK2ELjfBN
+mADvNHdyumZ6xOK6hcN8b4pO33ueYJOtpmszPGbEjkrK/IZg8NcIMWAbIryrwtDciFh24ArXmenN
+k5bUXWp6JsDgMGJHvgBfXLJEihFSNlM9iWRC3NB8h+tM9BZIl2jXi9nEnGnIIhUzai9JPkEPshUy
+pNzabhrVhJPjNvO8DtGD/EnlOsEBI5SNpE4JIpyc48dGxtUxlcbRFtt2/vHVS8RqslZs7nxVRjRf
+6Nwqrmlc5TrTM8nMWRufmj6UWSvqLtBp6HzD4UqaOFrYtnYWdWrtMhk+zjbGCv0m15me6THPxNWm
+9qHMWoBdXTwBENaIHxkaHVdOZHPnNlsL+k31meLAiE85zt6heteZnklQqyogw2ck+otSbdEYYD/C
+D+DUV+n+ydiUNN9sLSaiXgyQEMmys6BOqllqmuw5lOgPhE5yXAA6Zesw+ME+dRgXkU07Czl7/0oR
+S1qHqnEmuM30THos8qxyvqi2SDlnzzp++GqU9WJwJCmyAaYaslB2FvHSwe3CbhrypJqlrjM9nU6r
+PVeZ1JmNRg/lkx09jGXMJ1XNoMI7/R/YXgTiQnaxJrjOdaZn0vbuN6wP4yBf5HjEs6tfrX7+5L/L
+1uQRE8oFLeNB1xmeSYjoWqohyh9yTAA65TUYFHWX2TAcHZFWjZ3JX+H7s8gVK/WbXWd6OsHHUe1i
+RIVToeomR5jv9/s/jxJwhJxVma5d/e/bnvz1TX/NWQBbu153nel21RAsRNQ/yarsUOgrBQtAI+zn
+RqpRhbWhDbYnfpl2Y84C2N79husMz6S7yL3K+RqpS/QnFCwAnfCLMVhbt/rgzCXRglh7UulHF+ZZ
+l5LMzrLO3n4jbXmdEzvgXxgMh4vK/Mw1v9s2pbamMgGHzW1mq2gkOiqyAb0MKQGsd0AA/FWz4BuS
+FrlOHA6WHbzRu9t1JptR01gg67xhrKSqJ3Y5ZgGpcr5VAzU5T/yihmst1VBwgosTqs9ynclmhCo+
+Vc445ZD5C98BlDVjMAzq5AFZN6yZCmBHz1uuM9iKEHjMBlSHGEkaJwQQwWCqkpN84zUoAUkk1QVc
+qNE5v768qyiebntRmapM+QJDBQtAJ3wAg6kKrjCJfBewo+dt013gHyNlV8CVTg+Hn1b6AilvOOrE
+DhjGYOhEzAbU6ee7gN/vWy4T92Z4KPyk64xW0XoLAaCPufAdkOpuQUVYNjzb8XJBi7jFf7fpgYyw
+dblW021s32yqgqA9Ct8BhIcx2Oxc9vKTrV2vFTW6CGCXIIfgNsPthtVRqpPyA1od2AG81swMfX+g
+tuCFnFxzjohYOGcIfiEv6zbT0+mtvqqsc0XOJOUHNDqwA9g2M0eMTDBHFnNB/dWyQ8ZKCPlYRqta
+1khVZzdia5cQKjfLDztSMacRfj8GU/V5oVLAKUtlVcsaU9MUmIhNyr/Lx1JBmeS97BHZnOHEfFWZ
+MfAq5Qc8WLAAdMJXYrD2nj4lU5y01x9WWBbpwKH9fOcWS0aiviiW/H/jYWBuSGxo3VhQZ85Z+y9T
+zq+jJxWMo6ErHQtH04g6HH1PaH1JPMxMdE53KzNxYJBVuyp602DJ5NObhlSpVVoSPdIFCwA9srBn
+fZQrEzJv973nqAC8OSTugcaxFqnjDVV4Su0yEZowr2xOx1R8Stb85KJKVXEgtDKhaBlX7TjW2op2
+HEh0fHJa+SWdUL3EcSFstrkTDIQn22T7ExkPiXxwbeNfbM0LgoIaMytTRKuuxynolP/Dqibo5uY7
+HReAd88icR97VCZlSgGkS+3M6cbm1coxugeGjDrRexwTgI+Gf2nUhDpRlpIr3dS8OqcG63xh1894
+s+9d5RhGE18DZac4W5iVakfCjVWqnl+7hVn59m7V2GgnzRdo3LZzBvxu74ViWlGkezgPwIZwL5LH
+SaDOxUoNPVdgXMhrQ/fCjseh6TRe7d5paw6IfamAuqlUDGiDo8yXAgiGf2KnOLcU1w0srrtYxo/s
+1JfaAXK7aEey+l0UHsMRzAbwBHdjgEf1gdDPHBeAFAJh+/EDg6NjysW80rWj6ALwpqml5zu2KC0S
+O0B4w27VBZpIVBgeGze+/hZPsdBA2QXz7UnqwBk8z+UN15RMCN6UaoIFgwSP3cMa3jQCichJ2M1j
+Z/OqDYAn87VARbzyrL6+/hNGeHp4zJkWJa/DhEQ+YkXYiQiWZTINAqoaqJbX1+QiYKxJBQQqU+Hn
+MAwWTzFhFGqhXV91FkAluMF8bxZCvOicA5fLeNWZdZfKnrRcx9ioyP3KnZRMHm7MIHylpzR3AuH+
+t1alAHb2vuM6470OES6PMovQolXXKEGBhii6AIwd0HqwRzkp1E26zTivA4Rdo6p+A1ApcuhmXsKO
+KzrzpQAoexE/ODA8quztKqZD5i0RYQ2ItpqBG0W4hG8qCfOFEEcZZSqqHDGd4K4zz+uAeYvAnhkM
+1YOihZLd0N5A+I/nD+C2ghv1ypWWHbjC8pbFielpgfA8Qs64Xt9TKmgBdhsEgNvMVcCh5TYTvXkS
+7rYYiaqdTKMRD5dTpfT+XSVjvhQA5VXzCfrs7jiS6uVeUOtV2PmPR56zzEfHYvE0k5PtLOn192hV
+MjJjqio5RCvtLPZy/WaxofWZsri0D2EI3MhrBXlf3OFLOep8Pt/nPKWELxA+Az+OfKcKuFVEVXLy
+AH9cfDC494hQQSwZk1FI5G9LzXgEDeEt20n24Ms3mK9Tzlx5FgUlFrJTZkAd+DK+aLTv3En+LUvM
+rS7BMwSBv7UTkXTCvETaUhXVzKbzA2m35zYz9o2SM18KgDBiViGHcnJ8ze3T6h1ihWgiKqoH68Tf
+6H2yWs4ppiP8cGvL38W7A9ViLqG+4SvbtfbNqQPX1fujcWcyJtFkEn5wGtPxGbG7f49Yx5+QgbNc
+rizAOQMvFskbjGFl2WQCK0RPHM67lM5/reQ6Px0aZZdZhR+KjVgyLvvRaocOyJrMLV07pCpBeTya
+RP7b85Zsl4IDlctXnk3lpN2QG9coR2PzUR43oVP+sgw/jOT2JS0kJJNJ+fqSEduROfBiXDuTK2Dr
+Isk836aU/5cFwHxF4erBvgF56VOyDF7SwAyQ2zDs+/l3x9jGsrkb2hcM/tSqJEUFVImhUAkvJKHT
+3tCpBvl5m+yptXPZt9OA8JFaTX9NSSfMhzfNPOUE6EBMDg+j5fJml3xELXW9r0Gppwff0yhba1x1
+r+NwZ61yV+Ty2EO+mJqZlb9l3PeZKiOhWoAvL3o2Kx9ohO3BJFWvHqEWBroTBzSspCMYjmAV5Q1g
+OF6uS7/ECAebLxA+QyNsd/r/A7MPsSY0O6s87lwADxbPVYHpR3zt86al1hDk57h+yKqwLxT6onFT
+ChZiJCGgv3F3xKGg1BFfOQviMU2822jXbtaDwR9qhD2Alp7M8RB5hXDhAEJXj09Oya8Y4XD0Ys0/
+YxiVBWPYQcPjE9KExPxQ0Z2p9nTKuuVblcHWYz3lDuOiPuhqfJWZX1DagjbphF/khJfYQMM/0Am/
+Xad8r07YTMGPeVI+pxH2gUb56sZg+FcL6v3I+nD4Szrh/RlqZUQnfDueIyz2eypVVVVHNwSD3/VR
+drZO+Rr5GByeq51/rYNhbrDQZKUGYT6NsGqdsi3ybwN8OQyIBf88od7Cvi+3LA3fiuq4BfUFVVBB
+BRVUUEEFFVRQQQWeLPgf9KAmcTONhtQAAAAASUVORK5CYII=" style="width:14px; vertical-align:middle;" />
+                +91 99785 23288
+
+                <br>
+                ✉ samloadia@gmail.com
+            </div>
+        </div>
+
+        <div class="address-strip">
+            <span style="
+    display:inline-block;
+    transform: rotate(180deg);
+    font-size: 12px;
+    vertical-align: middle;
+  ">💧</span> 3, Under Shakti Cinema, Nr. HDFC Bank, Halvad-363330,
+            Dist. Morbi (Guj.)
+        </div>
+
+        <!-- TITLE -->
+        <div class="title-row">
+            <div><b>Debit Memo</b></div>
+            <div class="title-center">TAX INVOICE</div>
+            <div class="title-right">Original</div>
+        </div>
+
+        <!-- INFO -->
+        <div class="info">
+            <div class="info-box">
+                <b>M/r :</b> {{vendorName}}<br>
+                <b>Address:</b> {{vendorAddress}}<br>
+                <b>Mo. No :</b> {{mobileNumber}}<br>
+                <b>Place of Supply :</b> 24-Gujarat
+            </div>
+
+            <div class="info-box">
+                <b>Invoice No :</b> {{invoiceNo}}<br>
+                <b>Date :</b> {{invoiceDate}}<br>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <table>
+            <thead>
+                <tr>
+                    <th>SrNo</th>
+                    <th>Product Name</th>
+                    <th>HSN/SAC</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <!-- <th>GST %</th> -->
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{items}}
+            </tbody>
+
+        </table>
+
+        <!-- TOTALS -->
+        <div class="totals">
+            <div class="bank-box">
+                <b>GSTIN No :</b> {{shopGstin}}<br><br>
+                <!-- <b>Bank Name :</b> HDFC BANK<br>
+                <b>Bank A/c No :</b> 5020019513500<br>
+
+                <b>IFSC Code :</b> HDFC0002184<br><br> -->
+                <b>Bill Amount :</b> {{amountInWords}}
+            </div>
+
+            <div class="amount-box">
+                <div class="amount-line">
+                    <span>Sub Total</span>
+                    <span>{{taxableAmount}}</span>
+                </div>
+                <!-- <div class="amount-line">
+                    <span>CGST 9%</span>
+                    <span>{{cgstAmount}}</span>
+                </div>
+                <div class="amount-line">
+                    <span>SGST 9%</span>
+                    <span>{{sgstAmount}}</span>
+                </div> -->
+
+                <div class="amount-line grand">
+                    <span>Grand Total</span>
+                    <span>{{grandTotal}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div>
+                <b>Terms & Condition :</b><br>
+                1. Our risk and responsibility ceases as soon as the goods leave our premises.<br>
+                2. Interest @18% p.a will be charged if payment is not made within due date.<br>
+                3. Goods once sold will not be taken back.<br>
+                4. "E.&.O.E.".
+            </div>
+
+            <div class="sign">
+                For SAMEER MOBILE SHOP<br><br>
+                Authorised Signatory
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

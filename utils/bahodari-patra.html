@@ -17,7 +17,7 @@
         body {
             font-family: 'Noto Sans Gujarati', sans-serif;
             font-size: 14px;
-            color: #000;
+            color: #270f45;
             padding: 30px;
         }
 
@@ -28,7 +28,7 @@
         }
 
         .dealer-box {
-            border: 1px solid #000;
+            border: 1px solid #270f45;
             padding: 4px 10px;
             font-weight: 600;
         }
@@ -42,22 +42,33 @@
 
         .row {
             margin-bottom: 8px;
-            line-height: 1.6;
+            line-height: 2.6;
         }
 
         .line {
+            position: relative;
             display: inline-block;
-            min-width: 180px;
-            border-bottom: 1px dotted #000;
-            padding: 0 4px;
+            min-width: 80px;
+            padding: 0 6px;
             font-weight: 600;
         }
+
+        .line::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 6px;
+            /* 👈 move underline UP/DOWN here */
+            border-bottom: 1px solid #270f45;
+        }
+
 
         .checkbox {
             display: inline-block;
             width: 14px;
             height: 14px;
-            border: 1px solid #000;
+            border: 1px solid #270f45;
             margin: 0 6px;
             vertical-align: middle;
         }
@@ -80,7 +91,7 @@
         }
 
         .box {
-            border: 1px solid #000;
+            border: 1px solid #270f45;
             padding: 10px;
             min-height: 120px;
         }
@@ -102,31 +113,28 @@
 
     <div class="row">
         મારું નામ <span class="line">{{vendorName}}</span>છે. આથી હું નીચે સહી કરનાર
-    </div>
 
-    <div class="row">
+
+
         આ બહોદરીપત્ર લખી આપું છું કે, મારું ગામ
         <span class="line">{{vendorCity}}</span>
         સરનામું
         <span class="line">{{vendorAdress}}</span>
         રહ્યું છે.
-    </div>
 
-    <div class="row">
+
         મારી પાસે મારી માલિકીની મોબાઇલ જે
         <span class="line">{{mobile.brand}}</span>
         કંપનીનો છે.
-    </div>
 
-    <div class="row">
+
+
         જેનું મોડેલ નં.
         <span class="line">{{mobile.model}}</span>
         કલર
         <span class="line">{{mobile.color}}</span>
         છે.
-    </div>
 
-    <div class="row">
         જેનો IMEI નંબર
         <span class="line">{{mobile.imei}}</span>
         છે.
