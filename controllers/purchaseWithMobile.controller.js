@@ -17,7 +17,6 @@ export const addPurchaseWithMobile = async (req, res) => {
 export const getAllPurchaseWithMobile = async (req, res) => {
     try {
         const search = req.query.q?.trim();
-        console.log(search, 'search')
         const page = Math.max(parseInt(req.query.page) || 1, 1);
         const limit = Math.min(parseInt(req.query.limit) || 10, 50);
         const skip = (page - 1) * limit;

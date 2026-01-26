@@ -42,7 +42,6 @@ export const registerUser = async (req, res) => { // no provision for multiple u
 export const loginUser = async (req, res) => {
     try {
         const { mobile, mPin } = req.body;
-        console.log(req.body)
         if (!mobile || !mPin) {
             return res.status(400).json({ message: "mobile & mPin required" });
         }
@@ -63,7 +62,6 @@ export const loginUser = async (req, res) => {
 
         const accessToken = generateAccessToken(user._id);
         const refreshToken = generateRefreshToken();
-        console.log(refreshToken,'refreshToken')
 
         await refreshTokenModel.create({
             user: user._id,

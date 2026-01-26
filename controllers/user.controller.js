@@ -17,7 +17,6 @@ export const getUser = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-    console.log(req, 'updateUser........')
     try {
         const userId = req.userId;
 

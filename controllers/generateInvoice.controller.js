@@ -11,7 +11,6 @@ const generatePdfInvoice = async (req, res) => {
 
   try {
     const data = req.body;
-    console.log('Invoice data:', data);
 
     // Read HTML template
     const templatePath = path.resolve(
