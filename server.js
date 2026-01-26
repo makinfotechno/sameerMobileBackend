@@ -11,6 +11,7 @@ import profileRouter from "./routes/profile.route.js"
 import stock from "./routes/stock.js"
 import generatePdfContractRoute from "./routes/generatepdfContract.route.js"
 import generatePdfInvoiceRoute from "./routes/generatePdfInvoice.route.js"
+import authRouter from "./routes/auth.route.js"
 import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
 
@@ -25,6 +26,7 @@ const PORT = process.env.PORT || 5000
 app.get("/", (req, res) => { res.send("Sameer Mobile Backend running") })
 
 app.use("/v1/api/user", userRouter)
+app.use("/v1/api/auth", authRouter)
 app.use("/v1/api/profile", profileRouter)
 app.use("/v1/api/generatePdfContract", generatePdfContractRoute)
 app.use("/v1/api/generatePdfInvoice", generatePdfInvoiceRoute)

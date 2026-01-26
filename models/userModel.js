@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema({
     mPin: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
     }
 }, {
