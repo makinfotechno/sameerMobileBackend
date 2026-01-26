@@ -11,8 +11,8 @@ export const createSale = async (saleData) => {
         const { purchaseId } = saleData;
 
         const mobileUpdate = await Mobile.findOneAndUpdate(
-            { purchaseId, status: { $ne: "SoldOut" } },
-            { status: "SoldOut" },
+            { purchaseId, status: { $ne: "soldOut" } },
+            { status: "soldOut" },
             { new: true, runValidators: true, session }
         );
         if (!mobileUpdate) {
