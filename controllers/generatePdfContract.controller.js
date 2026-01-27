@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { getPurchaseWithMobileService } from '../services/purchaseWithMobile.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +12,8 @@ const generateContract = async (req, res) => {
     let browser;
 
     try {
-        const data = req.body;
+
+        const data = await getPurchaseWithMobileService(req.params.purchaseId);
 
         const formatDate = (isoDate) => {
             const d = new Date(isoDate);
@@ -37,7 +39,7 @@ const generateContract = async (req, res) => {
             .replace(/{{purchasePrice}}/g, data.purchasePrice)
             .replace(/{{billNumber}}/g, data.billNumber)
             .replace(/{{mobileNumber}}/g, data.mobileNumber)
-            .replace(/{{purchaseDate}}/g, formatDate(data.purchaseDate))
+            .replace(/{{purchaseDate}}/g, formatDate(Date.now()))
 
             // mobile nested fields
             .replace(/{{mobile.brand}}/g, data.mobile.brand)
@@ -46,10 +48,12 @@ const generateContract = async (req, res) => {
             .replace(/{{mobile.imei}}/g, data.mobile.imei)
 
             // checkboxes
+            .replace(/{{hasBill}}/g, data.hasOriginalBill ? 'checked' : '')
             .replace(/{{hasCharger}}/g, data.mobile.hasCharger ? 'checked' : '')
             .replace(/{{hasHandsFree}}/g, data.mobile.hasHandsFree ? 'checked' : '')
             .replace(/{{hasDataCable}}/g, data.mobile.hasDataCable ? 'checked' : '')
             .replace(/{{hasBox}}/g, data.mobile.hasBox ? 'checked' : '');
+            
 
         // 3️⃣ Generate IMEI boxes
         const imeiBoxes = data.mobile.imei

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
 export const generateAccessToken = (userId) =>
-    jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "8h" });
 
 export const generateRefreshToken = () =>
     crypto.randomBytes(40).toString("hex");

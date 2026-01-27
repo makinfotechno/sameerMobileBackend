@@ -1,7 +1,5 @@
-import Mobile from "../models/mobileModel.js"
 import Purchase from "../models/purchaseModel.js"
-import { createPurchaseWithMobile } from "../services/createPurchaseWithMobile.service.js"
-import { updatePurchaseWithMobileService } from "../services/updatePurchaseWithMobileservice.service.js"
+import { createPurchaseWithMobile, getPurchaseWithMobileService, updatePurchaseWithMobileService } from "../services/purchaseWithMobile.service.js"
 import { getS3Objects } from "../utils/s3Config.js"
 
 export const addPurchaseWithMobile = async (req, res) => {
@@ -119,6 +117,23 @@ export const getAllPurchaseWithMobile = async (req, res) => {
             message: error.message
         });
     }
+};
+
+export const getPurchaseWithMobile = async (req, res) => {
+  try {
+    const data = await getPurchaseWithMobileService(req.params.purchaseId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Purchase fetched successfully",
+      data
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
 
 export const updatePurchaseWithMobile = async (req, res) => {
