@@ -141,38 +141,80 @@ export const updatePurchaseWithMobileService = async (req) => {
         session.endSession();
     }
 };
- 
-export const getPurchaseWithMobileService = async (purchaseId) => {
-  if (!mongoose.Types.ObjectId.isValid(purchaseId)) {
-    throw new Error("Invalid purchaseId");
-  }
 
-  const result = await Purchase.aggregate([
-    { $match: { _id: new mongoose.Types.ObjectId(purchaseId) } },
-    {
-      $lookup: {
-        from: "mobiles",
-        localField: "_id",
-        foreignField: "purchaseId",
-        as: "mobile"
-      }
-    },
-    { $unwind: { path: "$mobile", preserveNullAndEmptyArrays: true } }
-  ]);
+export const getPurchaseWithMobileAndSaleService = async (purchaseId) => {
+    if (!mongoose.Types.ObjectId.isValid(purchaseId)) {
+        throw new Error("Invalid purchaseId");
+    }
 
-  if (!result.length) {
-    throw new Error("Purchase not found");
-  }
+    const result = await Purchase.aggregate([
+        {
+            $match: { _id: new mongoose.Types.ObjectId(purchaseId) }
+        },
 
-  const p = result[0];
+        {
+            $lookup: {
+                from: "mobiles",
+                localField: "_id",
+                foreignField: "purchaseId",
+                as: "mobile"
+            }
+        },
+        {
+            $unwind: {
+                path: "$mobile",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: "sales",
+                let: { purchaseId: { $toString: "$_id" } },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ["$purchaseId", "$$purchaseId"] }
+                        }
+                    },
+                    {
+                        $project: {
+                            purchaseId: 1,
+                            sellingPrice: 1,
+                            profit: 1,
+                            customer: 1,
+                            createdAt: 1
+                        }
+                    }
+                ],
+                as: "sale"
+            }
+        },
+        {
+            $unwind: {
+                path: "$sale",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $addFields: {
+                sale: { $ifNull: ["$sale", {}] }
+            }
+        }
+    ]);
 
-  p.vendorPhoto = await getS3Objects(p.vendorPhoto);
-  p.vendorDocumentPhoto = await getS3Objects(p.vendorDocumentPhoto);
-  p.billPhoto = await getS3Objects(p.billPhoto);
+    if (!result.length) {
+        throw new Error("Purchase not found");
+    }
 
-  if (p.mobile?.mobilePhoto) {
-    p.mobile.mobilePhoto = await getS3Objects(p.mobile.mobilePhoto);
-  }
+    const p = result[0];
 
-  return p;
+    p.vendorPhoto = await getS3Objects(p.vendorPhoto);
+    p.vendorDocumentPhoto = await getS3Objects(p.vendorDocumentPhoto);
+    p.billPhoto = await getS3Objects(p.billPhoto);
+
+    if (p.mobile?.mobilePhoto) {
+        p.mobile.mobilePhoto = await getS3Objects(p.mobile.mobilePhoto);
+    }
+
+    return p;
 };

@@ -2,15 +2,55 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { getPurchaseWithMobileAndSaleService } from '../services/purchaseWithMobile.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const shopData = {
+  name: "SAMEER MOBILE SHOP",
+  address: "Under Shakti Cinema, Nr. HDFC Bank",
+  city: "Halvad - 363330",
+  state: "Gujarat",
+  phone: "+91 99785 23288",
+  email: "samloadia@gmail.com",
+  shopGstin: "24AHZPL1951D1Z7"
+}
+
+// {
+//   "invoiceNo": "SMSI526",
+//   "invoiceDate": "22/01/2026",
+
+//   "vendorName": "Mohsin Baloch",
+//   "vendorAddress": "Kalol",
+//   "mobileNumber": "9010110101",
+//   "shopGstin": "24AHZPL1951D1Z7",
+
+//   "items": [
+//     {
+//       "srNo": 1,
+//       "productName": "APPLE IPHONE 17",
+//       "description": "256GB WHITE",
+//       "imei": "350453406576709",
+//       "hsn": "85171300",
+//       "qty": 1,
+//       "rate": 70254.24,
+//       "gst": 18,
+//       "amount": 70254.24
+//     }
+//   ],
+
+//   "grandTotal": 70254.00,
+//   "amountInWords": "Eighty Two Thousand Nine Hundred Only"
+// }
+
 
 const generatePdfInvoice = async (req, res) => {
   let browser;
 
   try {
-    const data = req.body;
+
+    const data = await getPurchaseWithMobileAndSaleService(req.params.purchaseId);
 
     // Read HTML template
     const templatePath = path.resolve(
@@ -22,28 +62,28 @@ const generatePdfInvoice = async (req, res) => {
 
     // Basic field replacement
     html = html
-      .replace(/{{invoiceNo}}/g, data.invoiceNo)
+      .replace(/{{invoiceNo}}/g, "SMR" + new Date().toLocaleDateString().replaceAll('/', ''))
       .replace(/{{invoiceDate}}/g, new Date().toLocaleDateString())
-    
+
       .replace(/{{vendorName}}/g, data.vendorName)
       .replace(/{{vendorAddress}}/g, data.vendorAddress)
-      .replace(/{{shopGstin}}/g, data.shopGstin)
+      .replace(/{{shopGstin}}/g, shopData.shopGstin)
       .replace(/{{mobileNumber}}/g, data.mobileNumber)
 
       // shop details
-      .replace(/{{shop.name}}/g, data.shop.name)
-      .replace(/{{shop.address}}/g, data.shop.address)
-      .replace(/{{shop.city}}/g, data.shop.city)
-      .replace(/{{shop.state}}/g, data.shop.state)
-      .replace(/{{shop.phone}}/g, data.shop.phone)
-      .replace(/{{shop.email}}/g, data.shop.email)
+      .replace(/{{shop.name}}/g, shopData.name)
+      .replace(/{{shop.address}}/g, shopData.address)
+      .replace(/{{shop.city}}/g, shopData.city)
+      .replace(/{{shop.state}}/g, shopData.state)
+      .replace(/{{shop.phone}}/g, shopData.phone)
+      .replace(/{{shop.email}}/g, shopData.email)
 
       // tax summary
-      .replace(/{{taxableAmount}}/g, data.tax.taxableAmount.toFixed(2))
-      .replace(/{{cgstPercent}}/g, data.tax.cgst)
-      .replace(/{{cgstAmount}}/g, data.tax.cgstAmount.toFixed(2))
-      .replace(/{{sgstPercent}}/g, data.tax.sgst)
-      .replace(/{{sgstAmount}}/g, data.tax.sgstAmount.toFixed(2))
+      // .replace(/{{taxableAmount}}/g, data.tax.taxableAmount.toFixed(2))
+      // .replace(/{{cgstPercent}}/g, data.tax.cgst)
+      // .replace(/{{cgstAmount}}/g, data.tax.cgstAmount.toFixed(2))
+      // .replace(/{{sgstPercent}}/g, data.tax.sgst)
+      // .replace(/{{sgstAmount}}/g, data.tax.sgstAmount.toFixed(2))
 
       // totals
       .replace(/{{grandTotal}}/g, data.grandTotal.toFixed(2))

@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { getPurchaseWithMobileService } from '../services/purchaseWithMobile.service.js';
+import { getPurchaseWithMobileAndSaleService } from '../services/purchaseWithMobile.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,7 +13,7 @@ const generateContract = async (req, res) => {
 
     try {
 
-        const data = await getPurchaseWithMobileService(req.params.purchaseId);
+        const data = await getPurchaseWithMobileAndSaleService(req.params.purchaseId);
 
         const formatDate = (isoDate) => {
             const d = new Date(isoDate);
