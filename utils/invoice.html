@@ -156,18 +156,22 @@
             padding: 8px;
         }
 
-        .amount-line {
+        /* .amount-line {
             display: flex;
             justify-content: space-between;
             margin-bottom: 4px;
-        }
+        } */
 
         .grand {
-            border-top: 2px solid #000;
+            /* border-top: 2px solid #000; */
             margin-top: 6px;
             padding-top: 6px;
             font-weight: 700;
+            height: 100%;
             font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
         }
 
         .footer {
@@ -392,10 +396,10 @@ RK5CYII=
             </div>
 
             <div class="amount-box">
-                <div class="amount-line">
+                <!-- <div class="amount-line">
                     <span>Sub Total</span>
                     <span>{{taxableAmount}}</span>
-                </div>
+                </div> -->
                 <!-- <div class="amount-line">
                     <span>CGST 9%</span>
                     <span>{{cgstAmount}}</span>
@@ -406,8 +410,10 @@ RK5CYII=
                 </div> -->
 
                 <div class="amount-line grand">
+                    <div style="width: 100%; display: flex; justify-content: space-between;">
                     <span>Grand Total</span>
                     <span>{{grandTotal}}</span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ import generatePdfInvoice from "../controllers/generateInvoice.controller.js";
 
 const router = Router()
 
-router.post('/', authMiddleware, generatePdfInvoice)
+router.post('/:purchaseId', authMiddleware, generatePdfInvoice)
  
 
 export default router

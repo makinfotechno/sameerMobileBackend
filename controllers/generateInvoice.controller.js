@@ -66,7 +66,7 @@ const generatePdfInvoice = async (req, res) => {
       .replace(/{{invoiceDate}}/g, new Date().toLocaleDateString())
 
       .replace(/{{vendorName}}/g, data.vendorName)
-      .replace(/{{vendorAddress}}/g, data.vendorAddress)
+      .replace(/{{vendorAddress}}/g, data.vendorAdress)
       .replace(/{{shopGstin}}/g, shopData.shopGstin)
       .replace(/{{mobileNumber}}/g, data.mobileNumber)
 
@@ -86,23 +86,23 @@ const generatePdfInvoice = async (req, res) => {
       // .replace(/{{sgstAmount}}/g, data.tax.sgstAmount.toFixed(2))
 
       // totals
-      .replace(/{{grandTotal}}/g, data.grandTotal.toFixed(2))
-      .replace(/{{amountInWords}}/g, data.amountInWords);
+      .replace(/{{grandTotal}}/g, data.sale.sellingPrice)
+      .replace(/{{amountInWords}}/g, data.sale.sellingPrice + " Only");
 
-    const itemsHtml = data.items.map(item => `
+    const itemsHtml = `
       <tr style="text-align: center;">
-        <td>${item.srNo}</td>
+        <td>${data?.srNo || 1}</td>
         <td>
-          <strong>${item.productName}</strong><br/>
-          ${item.description}<br/><br/>
-          IMEI: ${item.imei}
+          <strong>${data.mobile.brand}</strong><br/>
+          ${data.mobile.model} ${data.mobile.storage} ${data.mobile.color}<br/><br/>
+          IMEI: ${data.mobile.imei}
         </td>
-        <td>${item.hsn}</td>
-        <td>${item.qty}</td>
-        <td>${item.rate.toFixed(2)}</td>
-        <td>${item.amount.toFixed(2)}</td>
+        <td>${data.mobile.hsn || 85171300}</td>
+        <td>${data.mobile.qty || 1}</td>
+        <td>${data.sale.sellingPrice}</td>
+        <td>${data.sale.sellingPrice}</td>
       </tr>
-    `).join('');
+    `;
 
     html = html.replace(
       /{{items}}/g,
