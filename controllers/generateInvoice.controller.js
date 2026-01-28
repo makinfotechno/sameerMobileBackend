@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const shopData = {
   name: "SAMEER MOBILE SHOP",
-  address: "Under Shakti Cinema, Nr. HDFC Bank",
+  address: "3, Under Shakti Cinema, Nr. HDFC Bank",
   city: "Halvad - 363330",
   state: "Gujarat",
   phone: "+91 99785 23288",
@@ -71,12 +71,12 @@ const generatePdfInvoice = async (req, res) => {
       .replace(/{{mobileNumber}}/g, data.mobileNumber)
 
       // shop details
-      .replace(/{{shop.name}}/g, shopData.name)
-      .replace(/{{shop.address}}/g, shopData.address)
-      .replace(/{{shop.city}}/g, shopData.city)
-      .replace(/{{shop.state}}/g, shopData.state)
-      .replace(/{{shop.phone}}/g, shopData.phone)
-      .replace(/{{shop.email}}/g, shopData.email)
+      // .replace(/{{shop.name}}/g, shopData.name)
+      // .replace(/{{shop.address}}/g, shopData.address)
+      // .replace(/{{shop.city}}/g, shopData.city)
+      // .replace(/{{shop.state}}/g, shopData.state)
+      // .replace(/{{shop.phone}}/g, shopData.phone)
+      // .replace(/{{shop.email}}/g, shopData.email)
 
       // tax summary
       // .replace(/{{taxableAmount}}/g, data.tax.taxableAmount.toFixed(2))

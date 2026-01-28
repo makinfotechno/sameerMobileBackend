@@ -8,7 +8,7 @@ export const registerUser = async (req, res) => { // no provision for multiple u
     try {
         const { ownerName, shopName, adress, city, mobile, mPin } = req.body
 
-        if (!mobile || !mPin || !ownerName || !shopName || !adress || !city) {
+        if (!mobile || !mPin) {
             return res.status(400).json({ message: "All fields are required" })
         }
 
