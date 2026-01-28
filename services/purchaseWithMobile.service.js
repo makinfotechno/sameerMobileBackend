@@ -118,7 +118,7 @@ export const updatePurchaseWithMobileService = async (req) => {
 
                 mobileRes = await Mobile.findByIdAndUpdate(
                     mobileRes._id,
-                    { mobilePhoto: `mobile/${s3Key}` },
+                    { mobilePhoto: await getS3Objects(`mobile/${s3Key}`) },
                     { new: true, session }
                 );
 
@@ -131,7 +131,7 @@ export const updatePurchaseWithMobileService = async (req) => {
 
                 purchaseRes = await Purchase.findByIdAndUpdate(
                     purchaseId,
-                    { [file.fieldname]: `purchase/${s3Key}` },
+                    { [file.fieldname]: await getS3Objects(`purchase/${s3Key}`) },
                     { new: true, session }
                 );
 
@@ -225,6 +225,7 @@ export const getPurchaseWithMobileAndSaleService = async (purchaseId) => {
     p.vendorPhoto = await getS3Objects(p.vendorPhoto);
     p.vendorDocumentPhoto = await getS3Objects(p.vendorDocumentPhoto);
     p.billPhoto = await getS3Objects(p.billPhoto);
+    p.agreementPhoto = await getS3Objects(p.agreementPhoto);
 
     if (p.mobile?.mobilePhoto) {
         p.mobile.mobilePhoto = await getS3Objects(p.mobile.mobilePhoto);

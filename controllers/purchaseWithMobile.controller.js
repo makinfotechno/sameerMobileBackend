@@ -87,6 +87,7 @@ export const getAllPurchaseWithMobile = async (req, res) => {
                 p.vendorPhoto = await getS3Objects(p.vendorPhoto);
                 p.vendorDocumentPhoto = await getS3Objects(p.vendorDocumentPhoto);
                 p.billPhoto = await getS3Objects(p.billPhoto);
+                p.agreementPhoto = await getS3Objects(p.agreementPhoto);
 
                 // Mobile photos
                 if (p.mobile) {
