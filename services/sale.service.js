@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Mobile from "../models/mobileModel.js";
 import Sale from "../models/saleModel.js"
+import Transaction from "../models/transectionModel.js";
 
 export const createSale = async (saleData) => {
 
@@ -18,10 +19,22 @@ export const createSale = async (saleData) => {
         if (!mobileUpdate) {
             throw new Error("Mobile not found or already sold out");
         }
-        const saleAddData = await Sale.create([saleData], {session});
+        const saleAddData = await Sale.create([saleData], { session });
         if (!saleAddData) {
             throw new Error("Error while adding purchase")
         }
+
+        await Transaction.create({
+            purchaseId: purchaseId,
+            mobileId: mobileUpdate._id.toString(),
+            brand: mobileUpdate.brand,
+            model: mobileUpdate.model,
+            storage: mobileUpdate.storage,
+            ram: mobileUpdate.ram,
+            color: mobileUpdate.color,
+            type: "soldOut",
+            amount: saleData.sellingPrice
+        });
 
 
         session.commitTransaction();

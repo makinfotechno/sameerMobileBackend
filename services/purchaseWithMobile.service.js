@@ -6,6 +6,7 @@ import Mobile from "../models/mobileModel.js";
 import { deleteS3Object, uploadS3Object } from "../utils/s3Config.js";
 import { randomUUID } from "crypto";
 import { getS3Objects } from "../utils/s3Config.js";
+import Transaction from "../models/transectionModel.js";
 
 export const createPurchaseWithMobile = async (req) => {
 
@@ -43,6 +44,19 @@ export const createPurchaseWithMobile = async (req) => {
                 }, session);
             }
         }
+
+        await Transaction.create({
+            purchaseId: purchaseId,
+            mobileId: mobileRes._id.toString(),
+            brand: mobileRes.brand,
+            model: mobileRes.model,
+            storage: mobileRes.storage,
+            ram: mobileRes.ram,
+            color: mobileRes.color,
+            type: "inStock",
+            amount: purchaseRes.purchasePrice
+        });
+
         return {
             purchase: purchaseRes,
             mobile: mobileRes,

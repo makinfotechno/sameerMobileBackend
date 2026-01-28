@@ -11,6 +11,8 @@ import profileRouter from "./routes/profile.route.js"
 import stock from "./routes/stock.js"
 import generatePdfContractRoute from "./routes/generatepdfContract.route.js"
 import generatePdfInvoiceRoute from "./routes/generatePdfInvoice.route.js"
+import historyRoute from "./routes/transection.route.js"
+
 import authRouter from "./routes/auth.route.js"
 import soldOutstock from "./routes/soldOutStock.js"
 const app = express()
@@ -30,6 +32,7 @@ app.use("/v1/api/auth", authRouter)
 app.use("/v1/api/profile", profileRouter)
 app.use("/v1/api/generatePdfContract", generatePdfContractRoute)
 app.use("/v1/api/generatePdfInvoice", generatePdfInvoiceRoute)
+app.use("/v1/api/history", historyRoute)
 app.use("/v1/api/purchase", purchaseRoute)
 app.use("/v1/api/sale", salesRoute)
 app.use("/v1/api/mobile", mobileRoute)
