@@ -67,7 +67,7 @@ export const loginUser = async (req, res) => {
             user: user._id,
             tokenHash: hashToken(refreshToken),
             expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days,
-            platform:"android"
+            platform: "android"
 
         });
 
@@ -87,9 +87,26 @@ export const loginUser = async (req, res) => {
 
 export const logOutUser = async (req, res) => {
     const { refreshToken } = req.body;
-
+    const userId = req.userId;
     if (!refreshToken) {
         return res.status(400).json({ message: "Refresh token required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(401).json({ message: "User not found" });
+    }
+
+    const refreshTokenDoc = await refreshTokenModel.findOne({
+        user: userId,
+        revoked: false
+    });
+
+    const isRefTokenValid = refreshTokenDoc.tokenHash === hashToken(refreshToken);
+
+
+    if (!isRefTokenValid) {
+        return res.status(401).json({ message: "Invalid refresh token" });
     }
 
     await refreshTokenModel.updateOne(
