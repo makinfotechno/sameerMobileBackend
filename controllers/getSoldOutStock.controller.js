@@ -37,6 +37,28 @@ export const getSoldOutStock = async (req, res) => {
                     "mobile.status": "soldOut"
                 }
             },
+            {
+                $lookup: {
+                    from: "sales",
+                    let: { purchaseId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$purchaseId", { $toString: "$$purchaseId" }]
+                                }
+                            }
+                        }
+                    ],
+                    as: "sale"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$sale",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
             ...(search ? [{ $match: matchStage }] : []),
             {
                 $facet: {
@@ -55,7 +77,7 @@ export const getSoldOutStock = async (req, res) => {
 
         const response = await Promise.all(
             stock.map(async (purchase) => {
-                const p = { ...purchase };
+                const p = { ...purchase, sale: purchase.sale ?? null };
 
                 p.vendorPhoto = await getS3Objects(p?.vendorPhoto);
                 p.vendorDocumentPhoto = await getS3Objects(p?.vendorDocumentPhoto);

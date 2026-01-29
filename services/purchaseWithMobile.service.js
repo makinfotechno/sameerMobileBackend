@@ -118,7 +118,7 @@ export const updatePurchaseWithMobileService = async (req) => {
 
                 mobileRes = await Mobile.findByIdAndUpdate(
                     mobileRes._id,
-                    { mobilePhoto: await getS3Objects(`mobile/${s3Key}`) },
+                    { mobilePhoto: `mobile/${s3Key}` },
                     { new: true, session }
                 );
 
@@ -131,7 +131,7 @@ export const updatePurchaseWithMobileService = async (req) => {
 
                 purchaseRes = await Purchase.findByIdAndUpdate(
                     purchaseId,
-                    { [file.fieldname]: await getS3Objects(`purchase/${s3Key}`) },
+                    { [file.fieldname]: `purchase/${s3Key}` },
                     { new: true, session }
                 );
 
@@ -141,9 +141,37 @@ export const updatePurchaseWithMobileService = async (req) => {
 
         await session.commitTransaction();
 
+        const PURCHASE_FILE_FIELDS = [
+            "vendorPhoto",
+            "vendorDocumentPhoto",
+            "billPhoto",
+            "agreementPhoto"
+        ];
+
+        // Convert to plain objects
+        const purchaseObj = purchaseRes.toObject
+            ? purchaseRes.toObject()
+            : purchaseRes;
+console.log(purchaseObj, "purchaseObjpurchaseObj...........")
+        const mobileObj = mobileRes.toObject
+            ? mobileRes.toObject()
+            : mobileRes;
+
+        // Always generate signed URLs
+        for (const field of PURCHASE_FILE_FIELDS) {
+            if (purchaseObj[field]) {
+                purchaseObj[field] = await getS3Objects(purchaseObj[field]);
+            }
+        }
+
+        if (mobileObj.mobilePhoto) {
+            mobileObj.mobilePhoto = await getS3Objects(mobileObj.mobilePhoto);
+        }
+
+
         return {
-            purchase: purchaseRes,
-            mobile: mobileRes
+            purchase: purchaseObj,
+            mobile: mobileObj
         };
 
     } catch (error) {

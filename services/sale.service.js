@@ -11,34 +11,36 @@ export const createSale = async (saleData) => {
 
         const { purchaseId } = saleData;
 
-        const mobileUpdate = await Mobile.findOneAndUpdate(
+        const soldMobile = await Mobile.findOneAndUpdate(
             { purchaseId, status: { $ne: "soldOut" } },
             { status: "soldOut" },
             { new: true, runValidators: true, session }
         );
-        if (!mobileUpdate) {
+        if (!soldMobile) {
             throw new Error("Mobile not found or already sold out");
         }
+
         const saleAddData = await Sale.create([saleData], { session });
+
         if (!saleAddData) {
             throw new Error("Error while adding purchase")
         }
 
         await Transaction.create({
             purchaseId: purchaseId,
-            mobileId: mobileUpdate._id.toString(),
-            brand: mobileUpdate.brand,
-            model: mobileUpdate.model,
-            storage: mobileUpdate.storage,
-            ram: mobileUpdate.ram,
-            color: mobileUpdate.color,
+            mobileId: soldMobile._id.toString(),
+            brand: soldMobile.brand,
+            model: soldMobile.model,
+            storage: soldMobile.storage,
+            ram: soldMobile.ram,
+            color: soldMobile.color,
             type: "soldOut",
             amount: saleData.sellingPrice
         });
 
 
         session.commitTransaction();
-        return { mobileUpdate, saleAddData: saleAddData[0] }
+        return { soldMobile, saleData: saleAddData[0] }
 
     } catch (error) {
         session.abortTransaction();
@@ -57,9 +59,8 @@ export const deleteSaleByID = async (id) => {
 }
 
 export const updateSaleByID = async (id, updateData) => {
-
-    const saleData = await Sale.findByIdAndUpdate(
-        id, { $set: updateData }, { new: true, runValidators: true }
+    const saleData = await Sale.findOneAndUpdate(
+        {purchaseId: id}, { $set: updateData }, { new: true, runValidators: true }
     );
 
     if (!saleData) {
@@ -78,7 +79,7 @@ export const getAllSale = async () => {
 }
 
 export const getSale = async (id) => {
-    const saleData = await Sale.findById(id)
+    const saleData = await Sale.findOne({purchaseId: id})
     if (!saleData) {
         throw new Error("Requested sale data not found")
     }
